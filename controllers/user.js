@@ -6,9 +6,43 @@ exports.showSignin = (req, res) => {
 }
 
 exports.signin = (req, res) => {
-  res.send(JSON.stringify({
-    foo: 'bar'
-  }))
+  // 1. 获取表单 POST 提交数据
+  // 2. 普通数据验证
+  // 3. 业务数据验证
+  // 4. 验证通过，使用 Session 存储会话标识
+  // 5. 发送响应
+  const body = req.body
+
+  user.findByEmail(body.email, (err, ret) => {
+    if (err) {
+      return res.status(500).json({
+        error: err.message // err 错误对象有一个 message 属性是具体的错误消息
+      })
+    }
+
+    // 如果用户不存在
+    if (!ret) {
+      return res.status(200).json({
+        code: 1,
+        message: 'user not exists'
+      })
+    }
+
+    // 校验密码是否正确
+    if (md5(body.password) !== ret.password) {
+      return res.status(200).json({
+        code: 2,
+        message: 'password invalid'
+      })
+    }
+
+    // 使用 Session 持久化存储用户信息
+
+    res.status(200).json({
+      code: 0,
+      message: 'success'
+    })
+  })
 }
 
 exports.showSignup = (req, res) => {
@@ -26,6 +60,7 @@ exports.signup = (req, res) => {
 
   const body = req.body
 
+  // 校验邮箱是否被占用
   user.findByEmail(body.email, (err, ret) => {
     if (err) {
       return res.status(500).json({
@@ -40,10 +75,11 @@ exports.signup = (req, res) => {
       })
     }
 
+    // 校验昵称是否被占用
     user.findByNickname(body.nickname, (err, ret) => {
       if (err) {
         return res.status(500).json({
-          error: err.message // err 错误对象有一个 message 属性是具体的错误消息
+          error: err.message
         })
       }
 
@@ -54,12 +90,14 @@ exports.signup = (req, res) => {
         })
       }
 
+      // md5 加密处理
       body.password = md5(body.password)
 
+      // 持久化存储用户信息
       user.save(body, (err, results) => {
         if (err) {
           return res.status(500).json({
-            error: err.message // err 错误对象有一个 message 属性是具体的错误消息
+            error: err.message
           })
         }
         res.status(200).json({
@@ -68,11 +106,6 @@ exports.signup = (req, res) => {
         })
       })
     })
-
-    // res.status(200).json({
-    //   code: 0,
-    //   message: '注册成功'
-    // })
   })
 }
 
