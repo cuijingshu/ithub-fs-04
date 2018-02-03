@@ -36,7 +36,8 @@ exports.signin = (req, res) => {
       })
     }
 
-    // 使用 Session 持久化存储用户信息
+    // 使用 Session 存储用户登陆状态
+    req.session.user = ret
 
     res.status(200).json({
       code: 0,
@@ -100,6 +101,13 @@ exports.signup = (req, res) => {
             error: err.message
           })
         }
+
+        // 注册即登陆，使用 Session 保存登陆状态
+        req.session.user = {
+          ...body,
+          id: results.insertId
+        }
+
         res.status(200).json({
           code: 0,
           message: 'success'
