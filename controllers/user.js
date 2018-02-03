@@ -1,5 +1,5 @@
 exports.showSignin = (req,res) => {
-  res.send('get showSignin')
+  res.render('signin.html')
 }
 
 exports.signin = (req,res) => {
@@ -7,7 +7,7 @@ exports.signin = (req,res) => {
 }
 
 exports.showSignup = (req,res) => {
-  res.send('get showSignup')
+  res.render('signup.html')
 }
 
 exports.signup = (req,res) => {
