@@ -42,7 +42,7 @@
     // 3. 表单验证
     // 4. 验证通过发起注册请求
     // 5. 根据服务端响应结果做交互处理
-      
+
     var $signupForm = $('#signup_form')
 
     $signupForm.on('submit', function (e) {
@@ -58,7 +58,18 @@
         data: formData,
         dataType: 'json',
         success: function (data) {
-          console.log(data)
+          var code = data.code
+          switch (code) {
+            case 0:
+              window.location.href = '/'
+              break
+            case 1:
+              window.alert('邮箱已存在')
+              break
+            case 2:
+              window.alert('昵称已存在')
+              break
+          }
         },
         error: function (err) {
           window.alert('请求失败了')
