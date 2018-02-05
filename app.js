@@ -4,6 +4,11 @@ const session = require('express-session')
 
 const app = express()
 
+console.log(app.locals)
+
+// 你可以认为这是一个全局的模板对象
+// app.locals.foo = 'bar'
+
 const indexRouter = require('./routes/index')
 const userRouter = require('./routes/user')
 const topicRouter = require('./routes/topic')
@@ -33,6 +38,12 @@ app.use(session({
   resave: false,
   saveUninitialized: true // 无论你是否使用 Session ，我都默认直接给你分配一把钥匙
 }))
+
+// 注意：该中间件一定要写在配置 Session 中间件以及我们的路由之前
+app.use((req, res, next) => {
+  app.locals.user = req.session.user
+  next()
+})
 
 // 挂载路由容器到 app 应用程序中使路由生效
 app.use(indexRouter)
