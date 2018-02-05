@@ -4,7 +4,9 @@ const session = require('express-session')
 
 const app = express()
 
-const router = require('./router')
+const indexRouter = require('./routes/index')
+const userRouter = require('./routes/user')
+const topicRouter = require('./routes/topic')
 
 // 开放静态资源
 app.use('/node_modules', express.static('./node_modules/'))
@@ -33,6 +35,8 @@ app.use(session({
 }))
 
 // 挂载路由容器到 app 应用程序中使路由生效
-app.use(router)
+app.use(indexRouter)
+app.use(userRouter)
+app.use('/topic', topicRouter)
 
 app.listen(3000, () => console.log('app listening on port 3000!'))
