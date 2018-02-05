@@ -11,25 +11,24 @@
   <section class="container">
   <div class="row">
     <div class="col-md-5">
-      <form>
+      <form id="form" action="/topic/create" method="post">
         <div class="form-group">
-          <label for="exampleInputEmail1">选择板块</label>
-          <select class="form-control">
-            <option>分享</option>
-            <option>问答</option>
-            <option>招聘</option>
-            <option>客户端测试</option>
+          <label for="category">选择板块</label>
+          <select class="form-control" name="categoryId" id="category">
+            {{ each topics }}
+            <option value="{{ $value.id }}">{{ $value.name }}</option>
+            {{ /each }}
           </select>
         </div>
         <div class="form-group">
-          <label for="exampleInputEmail1">标题</label>
-          <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
+          <label for="title">标题</label>
+          <input type="text" class="form-control" id="title" name="title" placeholder="Email">
         </div>
         <div class="form-group">
-          <label for="exampleInputPassword1">内容</label>
-          <textarea class="form-control" rows="3"></textarea>
+          <label for="content">内容</label>
+          <textarea class="form-control" rows="3" id="content" name="content"></textarea>
         </div>
-        <button type="submit" class="btn btn-default">Submit</button>
+        <button type="submit" class="btn btn-default">发布</button>
       </form>
     </div>
   </div>
@@ -37,6 +36,21 @@
   {{include '../_includes/footer.html'}}
   <script src="/node_modules/jquery/dist/jquery.js"></script>
   <script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
+  <!-- 
+    npm install jquery-form
+    参考文档：https://github.com/jquery-form/form
+   -->
+  <script src="/node_modules/jquery-form/dist/jquery.form.min.js"></script>
+  <script>
+    var $form = $('#form')
+
+    $form.on('submit', function (e) {
+      e.preventDefault()
+      $form.ajaxSubmit(function (data) {
+        console.log(data)
+      })
+    })
+  </script>
 </body>
 
 </html>
