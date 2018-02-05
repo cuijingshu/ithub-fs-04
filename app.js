@@ -39,4 +39,18 @@ app.use(indexRouter)
 app.use(userRouter)
 app.use('/topic', topicRouter)
 
+// 错误处理中间件
+// 它需要显示的接收 4 个参数
+//    err 错误对象
+//    req 请求对象
+//    res 响应对象
+//    next 下一个匹配的中间件
+// 如何使用：
+//  
+app.use(function (err, req, res, next) {
+  res.status(500).send({
+    error: err.message
+  })
+})
+
 app.listen(3000, () => console.log('app listening on port 3000!'))

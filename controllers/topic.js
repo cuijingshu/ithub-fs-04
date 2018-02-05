@@ -1,23 +1,23 @@
-exports.showCreate = (req, res) => {
+exports.showCreate = (req, res, next) => {
   res.send('get showCreate')
 }
 
-exports.create = (req, res) => {
+exports.create = (req, res, next) => {
   res.send('post create')
 }
 
-exports.showDetail = (req, res) => {
+exports.showDetail = (req, res, next) => {
   res.send('get showDetail')
 }
 
-exports.showEdit = (req, res) => {
+exports.showEdit = (req, res, next) => {
   res.send('get showEdit')
 }
 
-exports.edit = (req, res) => {
+exports.edit = (req, res, next) => {
   res.send('post edit')
 }
 
-exports.delete = (req, res) => {
+exports.delete = (req, res, next) => {
   res.send('post delete')
 }
