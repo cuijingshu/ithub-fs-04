@@ -1,5 +1,6 @@
 const user = require('../models/user')
 const md5 = require('blueimp-md5')
+const moment = require('moment')
 
 exports.showSignin = (req, res, next) => {
   res.render('signin.html')
@@ -92,6 +93,8 @@ exports.signup = (req, res, next) => {
 
       // md5 加密处理
       body.password = md5(body.password)
+
+      body.createdAt = moment().format('YYYY-MM-DD HH:mm:ss')
 
       // 持久化存储用户信息
       user.save(body, (err, results) => {
