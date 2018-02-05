@@ -5,8 +5,6 @@ const {checkLogin} = require('./middlewares/auth')
 
 const app = express()
 
-console.log(app.locals)
-
 // 你可以认为这是一个全局的模板对象
 // app.locals.foo = 'bar'
 
