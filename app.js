@@ -1,6 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const session = require('express-session')
+const {checkLogin} = require('./middlewares/auth')
 
 const app = express()
 
@@ -48,7 +49,7 @@ app.use((req, res, next) => {
 // 挂载路由容器到 app 应用程序中使路由生效
 app.use(indexRouter)
 app.use(userRouter)
-app.use('/topic', topicRouter)
+app.use('/topic', checkLogin, topicRouter)
 
 // 错误处理中间件
 // 它需要显示的接收 4 个参数
