@@ -25,7 +25,7 @@
       <p> 发布于 几秒前  作者 lipengzhou  1 次浏览  来自 客户端测试</p>
       {{ if topic.userId === user.id }}
       <p>
-        <a href="#">编辑</a>
+        <a href="/topic/{{ topic.id }}/edit">编辑</a>
         <a id="delete" href="/topic/{{ topic.id }}/delete">删除</a>
       </p>
       {{ /if }}

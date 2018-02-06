@@ -1,14 +1,15 @@
 const topic = require('../models/topic')
+const topicCatetory = require('../models/topic-category')
 const moment = require('moment')
 const marked = require('marked')
 
 exports.showCreate = (req, res, next) => {
-  topic.findAll((err, topics) => {
+  topicCatetory.findAll((err, topicCategories) => {
     if (err) {
       return next(err)
     }
     res.render('topic/create.html', {
-      topics
+      topicCategories
     })
   })
 }
@@ -55,7 +56,21 @@ exports.showDetail = (req, res, next) => {
 }
 
 exports.showEdit = (req, res, next) => {
-  res.send('get showEdit')
+  const {topicId} = req.params
+  topicCatetory.findAll((err, topicCategories) => {
+    if (err) {
+      return next(err)
+    }
+    topic.findById(topicId, (err, topic) => {
+      if (err) {
+        return next(err)
+      }
+      res.render('topic/edit.html', {
+        topic,
+        topicCategories
+      })
+    })
+  })
 }
 
 exports.edit = (req, res, next) => {

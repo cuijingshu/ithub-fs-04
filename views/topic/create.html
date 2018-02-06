@@ -26,7 +26,7 @@
         <div class="form-group">
           <label for="category">选择板块</label>
           <select class="form-control" name="categoryId" id="category">
-            {{ each topics }}
+            {{ each topicCategories }}
             <option value="{{ $value.id }}">{{ $value.name }}</option>
             {{ /each }}
           </select>
