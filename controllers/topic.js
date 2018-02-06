@@ -1,5 +1,6 @@
 const topic = require('../models/topic')
 const moment = require('moment')
+const marked = require('marked')
 
 exports.showCreate = (req, res, next) => {
   topic.findAll((err, topics) => {
@@ -35,7 +36,19 @@ exports.create = (req, res, next) => {
 }
 
 exports.showDetail = (req, res, next) => {
-  res.send('get showDetail')
+  // 在 Express 中，可以通过 req.params 来获取动态路径参数
+  const {topicId} = req.params
+  topic.findById(topicId, (err, topic) => {
+    if (err) {
+      return next(err)
+    }
+
+    topic && (topic.content = marked(topic.content))
+
+    res.render('topic/show.html', {
+      topic
+    })
+  })
 }
 
 exports.showEdit = (req, res, next) => {
