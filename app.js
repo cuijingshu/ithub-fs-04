@@ -63,4 +63,9 @@ app.use(function (err, req, res, next) {
   })
 })
 
+// 配置处理 404
+app.use((req, res, next) => {
+  res.render('404.html')
+})
+
 app.listen(3000, () => console.log('app listening on port 3000!'))
