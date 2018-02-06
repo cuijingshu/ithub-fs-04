@@ -64,13 +64,34 @@ exports.edit = (req, res, next) => {
 
 exports.delete = (req, res, next) => {
   const {topicId} = req.params
-  topic.findByIdAndRemove(topicId, (err, results) => {
+
+  topic.findById(topicId, (err, topic) => {
     if (err) {
       return next(err)
     }
-    return res.status(200).json({
-      code: 0,
-      message: 'success'
+    
+    if (!topic) {
+      return res.status(200).json({
+        code: 1,
+        message: '该资源已不存在'
+      })
+    }
+
+    if (topic.userId !== req.session.user.id) {
+      return res.status(200).json({
+        code: 2,
+        message: '你个坏孩子，别玩儿了（话题不是当前登陆用户的）'
+      })
+    }
+
+    topic.findByIdAndRemove(topicId, (err, results) => {
+      if (err) {
+        return next(err)
+      }
+      return res.status(200).json({
+        code: 0,
+        message: 'success'
+      })
     })
   })
 }
