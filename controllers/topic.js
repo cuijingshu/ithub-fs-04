@@ -63,5 +63,14 @@ exports.edit = (req, res, next) => {
 }
 
 exports.delete = (req, res, next) => {
-  res.send('post delete')
+  const {topicId} = req.params
+  topic.findByIdAndRemove(topicId, (err, results) => {
+    if (err) {
+      return next(err)
+    }
+    return res.status(200).json({
+      code: 0,
+      message: 'success'
+    })
+  })
 }

@@ -13,9 +13,9 @@ router
   .get('/create', topicController.showCreate)
   .post('/create', topicController.create)
   .get('/:topicId', topicController.showDetail)
-  .get('/:topicID/edit', topicController.showEdit)
-  .post('/:topicID/edit', topicController.edit)
-  .post('/:topicID/delete', topicController.delete)
+  .get('/:topicId/edit', topicController.showEdit)
+  .post('/:topicId/edit', topicController.edit)
+  .post('/:topicId/delete', topicController.delete)
 
 // 评论相关
 

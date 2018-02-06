@@ -23,6 +23,12 @@
       <article class="markdown-body">
       <h1 id="_1"><a name="user-content-_1" href="#_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>{{ topic.title }}</h1>
       <p> 发布于 几秒前  作者 lipengzhou  1 次浏览  来自 客户端测试</p>
+      {{ if topic.userId === user.id }}
+      <p>
+        <a href="#">编辑</a>
+        <a id="delete" href="/topic/{{ topic.id }}/delete">删除</a>
+      </p>
+      {{ /if }}
       <hr>
       <!-- 不转义输出 -->
       <div>{{@ topic.content }}</div>
@@ -112,6 +118,22 @@
   {{include '../_includes/footer.html'}}
   <script src="/node_modules/jquery/dist/jquery.js"></script>
   <script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
+  <script>
+    $('#delete').on('click', function (e) {
+      e.preventDefault()
+      if (!window.confirm('Are you ok?')) {
+        return
+      }
+      var url = $(this).attr('href')
+      $.post(url, function (data) {
+        switch(data.code) {
+          case 0:
+            window.location.href = '/'
+            break
+        }
+      })
+    })
+  </script>
 </body>
 
 </html>

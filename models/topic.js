@@ -14,6 +14,11 @@ exports.findById = (id, callback) => {
   })
 }
 
+exports.findByIdAndRemove = (id, callback) => {
+  const sqlStr = 'DELETE FROM `topics` WHERE `id`=?'
+  query(sqlStr, [id], callback)
+}
+
 exports.save = (topic, callback) => {
   const sqlStr = 'INSERT INTO `topics` SET ?'
   query(sqlStr, topic, callback)
