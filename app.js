@@ -1,9 +1,22 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const session = require('express-session')
+const responseTime = require('response-time')
 const {checkLogin} = require('./middlewares/auth')
+const morgan = require('morgan')
+const serveIndex = require('serve-index')
+const compression = require('compression')
 
 const app = express()
+
+// compress all responses
+app.use(compression())
+
+// 记录请求日志的中间件
+app.use(morgan('tiny'))
+
+// 将 public 目录开放为一个类似于 Apache 的静态文件目录列表
+app.use('/public', express.static('./public/'), serveIndex('./public/', {'icons': true}))
 
 // 你可以认为这是一个全局的模板对象
 // app.locals.foo = 'bar'
@@ -11,6 +24,10 @@ const app = express()
 const indexRouter = require('./routes/index')
 const userRouter = require('./routes/user')
 const topicRouter = require('./routes/topic')
+
+// 配置响应事件的中间件
+//    该中间件会帮你在响应头中加入一个字段：
+app.use(responseTime())
 
 // 开放静态资源
 app.use('/node_modules', express.static('./node_modules/'))
