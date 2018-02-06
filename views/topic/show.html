@@ -17,10 +17,16 @@
   <section class="container">
   <div class="row">
     <div class="col-md-9">
+      {{ if !topic }}
+      <div class="alert alert-danger" role="alert">此话题不存在或已被删除。</div>
+      {{ else }}
       <article class="markdown-body">
       <h1 id="_1"><a name="user-content-_1" href="#_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>{{ topic.title }}</h1>
+      <p> 发布于 几秒前  作者 lipengzhou  1 次浏览  来自 客户端测试</p>
+      <hr>
       <!-- 不转义输出 -->
       <div>{{@ topic.content }}</div>
+      {{ /if }}
     </article>
       <div class="panel panel-default">
         <div class="panel-heading">
