@@ -6,6 +6,10 @@ const {checkLogin} = require('./middlewares/auth')
 const morgan = require('morgan')
 const serveIndex = require('serve-index')
 const compression = require('compression')
+const config = require('./config')
+
+const MySQLStore = require('express-mysql-session')(session)
+const sessionStore = new MySQLStore(config.dbConfig)
 
 const app = express()
 
@@ -52,7 +56,11 @@ app.use(session({
   // 目的是为了增加安全性，防止客户端恶意伪造
   secret: 'itcast',
   resave: false,
-  saveUninitialized: true // 无论你是否使用 Session ，我都默认直接给你分配一把钥匙
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24 * 3 // 配置 Cookie 的过期时间为 3 天，单位是毫秒
+  },
+  saveUninitialized: true, // 无论你是否使用 Session ，我都默认直接给你分配一把钥匙
+  store: sessionStore // 持久化存储 Session 到 MySQL 数据库
 }))
 
 // 注意：该中间件一定要写在配置 Session 中间件以及我们的路由之前
