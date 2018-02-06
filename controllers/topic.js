@@ -30,6 +30,9 @@ exports.create = (req, res, next) => {
     }
     res.status(200).json({
       code: 0,
+      data: {
+        redirect: `/topic/${results.insertId}` // 告诉客户端重定向的地址
+      },
       message: 'success'
     })
   })
