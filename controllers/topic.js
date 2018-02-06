@@ -74,39 +74,32 @@ exports.showEdit = (req, res, next) => {
 }
 
 exports.edit = (req, res, next) => {
-  res.send('post edit')
+  const {topicId} = req.params
+
+  topic.findByIdAndUpdate(topicId, req.body, (err, results) => {
+    if (err) {
+      return next(err)
+    }
+    res.status(200).json({
+      code: 0,
+      data: {
+        redirect: `/topic/${topicId}`
+      },
+      message: 'success'
+    })
+  })
 }
 
 exports.delete = (req, res, next) => {
   const {topicId} = req.params
-
-  topic.findById(topicId, (err, topic) => {
+  
+  topic.findByIdAndRemove(topicId, (err, results) => {
     if (err) {
       return next(err)
     }
-    
-    if (!topic) {
-      return res.status(200).json({
-        code: 1,
-        message: '该资源已不存在'
-      })
-    }
-
-    if (topic.userId !== req.session.user.id) {
-      return res.status(200).json({
-        code: 2,
-        message: '你个坏孩子，别玩儿了（话题不是当前登陆用户的）'
-      })
-    }
-
-    topic.findByIdAndRemove(topicId, (err, results) => {
-      if (err) {
-        return next(err)
-      }
-      return res.status(200).json({
-        code: 0,
-        message: 'success'
-      })
+    return res.status(200).json({
+      code: 0,
+      message: 'success'
     })
   })
 }

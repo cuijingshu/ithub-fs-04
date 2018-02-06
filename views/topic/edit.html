@@ -28,7 +28,7 @@
       {{ if topic.userId !== user.id }}
       <div class="alert alert-danger" role="alert">您没有编辑该话题的权限！</div>
       {{ else }}
-      <form id="form" action="/topic/create" method="post">
+      <form id="form" action="/topic/{{ topic.id }}/edit" method="post">
         <div class="form-group">
           <label for="category">选择板块</label>
           <select class="form-control" name="categoryId" id="category">
@@ -81,6 +81,12 @@
         switch(code) {
           case 0:
             window.location.href = data.data.redirect
+            break
+          case 1:
+            window.alert('该资源不存在或已删除')
+            break
+          case 2:
+            window.alert('对不起，您没有操作权限！')
             break
         }
       })

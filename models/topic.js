@@ -24,3 +24,17 @@ exports.save = (topic, callback) => {
   query(sqlStr, topic, callback)
 }
 
+exports.findByIdAndUpdate = (id, topic, callback) => {
+  const sqlStr = 'UPDATE `topics` SET `title`=?, `content`=?, `categoryId`=? WHERE `id`=?'
+  query(sqlStr, [topic.title, topic.content, topic.categoryId, id], callback)
+}
+
+// class Topic {
+//   static findAll () {
+
+//   }
+
+//   static findByIdAndRemove () {
+
+//   }
+// }
