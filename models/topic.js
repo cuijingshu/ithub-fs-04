@@ -4,6 +4,10 @@ exports.findAll = callback => {
   query('SELECT * FROM `topics`', callback)
 }
 
+exports.findByCategoryId = (categoryId, callback) => {
+  query('SELECT * FROM `topics` WHERE categoryId=?', [categoryId], callback)
+}
+
 exports.findById = (id, callback) => {
   const sqlStr = 'SELECT * FROM `topics` WHERE `id`=?'
   query(sqlStr, [id], (err, results) => {
