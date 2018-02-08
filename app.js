@@ -6,8 +6,14 @@ const morgan = require('morgan')
 const serveIndex = require('serve-index')
 const compression = require('compression')
 const config = require('./config')
-
 const MySQLStore = require('express-mysql-session')(session)
+
+// 路由相关模块
+const indexRouter = require('./routes/index')
+const userRouter = require('./routes/user')
+const topicRouter = require('./routes/topic')
+const commentRouter = require('./routes/comment')
+
 const sessionStore = new MySQLStore(config.dbConfig)
 
 const app = express()
@@ -23,10 +29,6 @@ app.use('/public', express.static('./public/'), serveIndex('./public/', {'icons'
 
 // 你可以认为这是一个全局的模板对象
 // app.locals.foo = 'bar'
-
-const indexRouter = require('./routes/index')
-const userRouter = require('./routes/user')
-const topicRouter = require('./routes/topic')
 
 // 配置响应事件的中间件
 //    该中间件会帮你在响应头中加入一个字段：
@@ -72,6 +74,7 @@ app.use((req, res, next) => {
 app.use(indexRouter)
 app.use(userRouter)
 app.use('/topic', topicRouter)
+app.use('/topic', commentRouter)
 
 // 错误处理中间件
 // 它需要显示的接收 4 个参数
