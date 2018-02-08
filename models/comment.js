@@ -27,6 +27,10 @@ module.exports = class Comment {
     query('SELECT * FROM `topic_comments`', callback)
   }
 
+  static findByTopicId (topicId, callback) {
+    query('SELECT * FROM `topic_comments` WHERE `topicId`=?', [topicId], callback)
+  }
+
   static findById (id, callback) {
     query('SELECT * FROM `topic_comments` WHERE `id`=?', [id], (err, results) => {
       if (err) {

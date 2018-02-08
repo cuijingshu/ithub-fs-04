@@ -34,78 +34,9 @@
       <div>{{@ topic.content }}</div>
       {{ /if }}
     </article>
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <span>lipengzhou</span> commented 
-          <span>24 minutes ago</span>
-          <span class="action">
-            <a href=""><i class="glyphicon glyphicon-thumbs-up pull-right"></i></a>
-            <a href=""><i class="glyphicon glyphicon-remove-circle pull-right"></i></a>
-            <a href=""><i class="glyphicon glyphicon-remove-circle pull-right"></i></a>
-          </span>
-        </div>
-        <div class="panel-body">
-          评论测试
-        </div>
-      </div>
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <span>lipengzhou</span> commented 
-          <span>24 minutes ago</span>
-          <span class="action">
-            <a href=""><i class="glyphicon glyphicon-thumbs-up pull-right"></i></a>
-            <a href=""><i class="glyphicon glyphicon-remove-circle pull-right"></i></a>
-            <a href=""><i class="glyphicon glyphicon-remove-circle pull-right"></i></a>
-          </span>
-        </div>
-        <div class="panel-body">
-          评论测试
-        </div>
-      </div>
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <span>lipengzhou</span> commented 
-          <span>24 minutes ago</span>
-          <span class="action">
-            <a href=""><i class="glyphicon glyphicon-thumbs-up pull-right"></i></a>
-            <a href=""><i class="glyphicon glyphicon-remove-circle pull-right"></i></a>
-            <a href=""><i class="glyphicon glyphicon-remove-circle pull-right"></i></a>
-          </span>
-        </div>
-        <div class="panel-body">
-          评论测试
-        </div>
-      </div>
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <span>lipengzhou</span> commented 
-          <span>24 minutes ago</span>
-          <span class="action">
-            <a href=""><i class="glyphicon glyphicon-thumbs-up pull-right"></i></a>
-            <a href=""><i class="glyphicon glyphicon-remove-circle pull-right"></i></a>
-            <a href=""><i class="glyphicon glyphicon-remove-circle pull-right"></i></a>
-          </span>
-        </div>
-        <div class="panel-body">
-          评论测试
-        </div>
-      </div>
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <span>lipengzhou</span> commented 
-          <span>24 minutes ago</span>
-          <span class="action">
-            <a href=""><i class="glyphicon glyphicon-thumbs-up pull-right"></i></a>
-            <a href=""><i class="glyphicon glyphicon-remove-circle pull-right"></i></a>
-            <a href=""><i class="glyphicon glyphicon-remove-circle pull-right"></i></a>
-          </span>
-        </div>
-        <div class="panel-body">
-          评论测试
-        </div>
-      </div>
-      <hr>
-      {{ if !user }}
+    <div class="comment-container">
+    </div>
+    {{ if !user }}
       <div class="alert alert-success" role="alert"><a href="/signin">登陆</a>之后才能发表评论</div>
       {{ else }}
       <form id="comment_form" action="/topic/{{ topic.id }}/comment" method="post">
@@ -123,7 +54,31 @@
   <script src="/node_modules/jquery/dist/jquery.js"></script>
   <script src="/node_modules/jquery-form/dist/jquery.form.min.js"></script>
   <script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="/node_modules/art-template/lib/template-web.js"></script>
+  <script type="text/template" id="tpl">
+    <% comments.forEach(function (item, index) { %>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <span>lipengzhou</span> commented 
+          <span>24 minutes ago</span>
+          <span class="action">
+            <a href=""><i class="glyphicon glyphicon-thumbs-up pull-right"></i></a>
+            <a href=""><i class="glyphicon glyphicon-remove-circle pull-right"></i></a>
+            <a href=""><i class="glyphicon glyphicon-remove-circle pull-right"></i></a>
+          </span>
+        </div>
+        <div class="panel-body">
+          <%= item.content %>
+        </div>
+      </div>
+    <% }) %>
+  </script>
   <script>
+    var $commentForm = $('#comment_form')
+
+    // 初次加载，获取所有评论
+    loadComments()
+
     $('#delete').on('click', function (e) {
       e.preventDefault()
       if (!window.confirm('Are you ok?')) {
@@ -148,16 +103,33 @@
     // 1. 展示评论列表
     // 2. 发布评论
 
-    $('#comment_form').on('submit', function (e) {
+    $commentForm.on('submit', function (e) {
       e.preventDefault()
       $(this).ajaxSubmit({
         error: function (err) {
           if (err && err.status === 401) {
             window.alert('登陆状态已过期，请重新登录')
           }
+        },
+        success: function (data) {
+          var code = data.code
+          if (code === 0) {
+            loadComments()
+          }
         }
       })
     })
+
+    function loadComments() {
+      var topicListUrl = $commentForm.attr('action')
+
+      $.get(topicListUrl, function (data) {
+        var htmlStr = template('tpl', {
+          comments: data.data
+        })
+        $('.comment-container').html(htmlStr)
+      })
+    }
   </script>
 </body>
 

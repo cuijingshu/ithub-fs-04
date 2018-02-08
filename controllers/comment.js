@@ -1,7 +1,17 @@
 const Comment = require('../models/comment')
 
 exports.list = (req, res, next) => {
-  res.send('get list')
+  const {topicId} = req.params
+  console.log(topicId)
+  Comment.findByTopicId(topicId, (err, comments) => {
+    if (err) {
+      return next(err)
+    }
+    res.status(200).json({
+      code: 0,
+      data: comments
+    })
+  })
 }
 
 exports.create = (req, res, next) => {
