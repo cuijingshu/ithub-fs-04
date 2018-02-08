@@ -1,9 +1,19 @@
 const Comment = require('../models/comment')
 
 exports.list = (req, res, next) => {
+  // /topic/168/comment?page=2&limit=1
+  // 默认每页 10 条评论
+  // 默认返回第 1 页
+  // 一共分多少页？
+  //    向上取整(总条数 / 每页大小)
+  const {page = 1, limit = 10} = req.query
   const {topicId} = req.params
-  console.log(topicId)
-  Comment.findByTopicId(topicId, (err, comments) => {
+
+  Comment.findByTopicId({
+    page, // 页码
+    limit, // 每页大小
+    topicId
+  }, (err, comments) => {
     if (err) {
       return next(err)
     }

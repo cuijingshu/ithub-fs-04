@@ -27,8 +27,19 @@ module.exports = class Comment {
     query('SELECT * FROM `topic_comments`', callback)
   }
 
-  static findByTopicId (topicId, callback) {
-    query('SELECT * FROM `topic_comments` WHERE `topicId`=?', [topicId], callback)
+  static findByTopicId (options, callback) {
+    let {page, limit, topicId} = options
+    page = page - 0
+    limit = limit - 0
+
+    // 限制最大为 100
+    if (limit > 100) {
+      limit = 100
+    }
+
+    const start = (page - 1) * limit
+    console.log(start, page, limit)
+    query('SELECT * FROM `topic_comments` WHERE `topicId`=? LIMIT ?,?', [topicId, start, limit], callback)
   }
 
   static findById (id, callback) {
