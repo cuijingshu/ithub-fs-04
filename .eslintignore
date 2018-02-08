@@ -2,3 +2,4 @@ node_modules
 public
 views
 .eslintrc.js
+test.js
