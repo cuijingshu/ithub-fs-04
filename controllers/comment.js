@@ -1,9 +1,27 @@
+const Comment = require('../models/comment')
+
 exports.list = (req, res, next) => {
   res.send('get list')
 }
 
 exports.create = (req, res, next) => {
-  res.send('post create')
+  const {topicId} = req.params // 话题 id
+  const {content} = req.body // 评论内容
+  const userId = req.session.user.id // 评论作者
+
+  new Comment({
+    topicId,
+    content,
+    userId
+  }).save((err, results) => {
+    if (err) {
+      return next(err)
+    }
+    res.status(200).json({
+      code: 0,
+      message: 'success'
+    })
+  })
 }
 
 exports.showEdit = (req, res, next) => {

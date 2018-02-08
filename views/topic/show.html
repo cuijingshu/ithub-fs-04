@@ -105,18 +105,23 @@
         </div>
       </div>
       <hr>
-      <form>
+      {{ if !user }}
+      <div class="alert alert-success" role="alert"><a href="/signin">登陆</a>之后才能发表评论</div>
+      {{ else }}
+      <form id="comment_form" action="/topic/{{ topic.id }}/comment" method="post">
         <div class="form-group">
-          <label for="exampleInputPassword1">添加回复</label>
-          <textarea class="form-control" name="" id="" cols="10" rows="10"></textarea>
+          <label for="content">添加回复</label>
+          <textarea class="form-control" name="content" id="content" cols="10" rows="10"></textarea>
         </div>
         <button type="submit" class="btn btn-success">回复</button>
       </form>
+      {{ /if }}
     </div>
   </div>
 </section>
   {{include '../_includes/footer.html'}}
   <script src="/node_modules/jquery/dist/jquery.js"></script>
+  <script src="/node_modules/jquery-form/dist/jquery.form.min.js"></script>
   <script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
   <script>
     $('#delete').on('click', function (e) {
@@ -137,6 +142,16 @@
             window.alert('对不起，您没有权限执行该操作！')
             break
         }
+      })
+    })
+
+    // 1. 展示评论列表
+    // 2. 发布评论
+
+    $('#comment_form').on('submit', function (e) {
+      e.preventDefault()
+      $(this).ajaxSubmit(function (data) {
+        console.log(data)
       })
     })
   </script>
