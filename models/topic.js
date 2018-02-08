@@ -13,7 +13,7 @@ exports.findAll = (...args) => {
 
   const whereSql = parseToWhereStr(conditionObj)
 
-  query('SELECT * FROM `topics`' + whereSql, callback)
+  query('SELECT * FROM `topics`' + whereSql + ' ORDER BY `id` DESC ', callback)
 }
 
 exports.findByCategoryId = (categoryId, callback) => {
