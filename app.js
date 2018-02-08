@@ -40,6 +40,7 @@ app.use('/public', express.static('./public/'))
 
 // 配置模板引擎
 // 这里我把 art 改为 html
+require('art-template').defaults.rules.shift() // 删除原生语法规则
 app.engine('html', require('express-art-template'))
 
 // 配置 body-parser 解析表单请求体
