@@ -14,6 +14,8 @@ npm install
 
 # 在 config.js 中修改数据库配置
 
-# 启动服务器
-node app.js
+# 启动开发模式
+# 这里增加了 eslint 代码规范校验
+# 代码规范通过才会成功启动服务器
+npm run dev
 ```
