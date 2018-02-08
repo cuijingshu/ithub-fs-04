@@ -150,8 +150,12 @@
 
     $('#comment_form').on('submit', function (e) {
       e.preventDefault()
-      $(this).ajaxSubmit(function (data) {
-        console.log(data)
+      $(this).ajaxSubmit({
+        error: function (err) {
+          if (err && err.status === 401) {
+            window.alert('登陆状态已过期，请重新登录')
+          }
+        }
       })
     })
   </script>
