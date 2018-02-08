@@ -23,7 +23,7 @@
       <article class="markdown-body">
       <h1 id="_1"><a name="user-content-_1" href="#_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>{{ topic.title }}</h1>
       <p> 发布于 几秒前  作者 lipengzhou  1 次浏览  来自 客户端测试</p>
-      {{ if topic.userId === user.id }}
+      {{ if user && topic.userId === user.id }}
       <p>
         <a href="/topic/{{ topic.id }}/edit">编辑</a>
         <a id="delete" href="/topic/{{ topic.id }}/delete">删除</a>
