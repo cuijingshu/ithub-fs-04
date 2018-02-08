@@ -5,18 +5,19 @@ const express = require('express')
 
 const topicController = require('../controllers/topic')
 const topicMiddleware = require('../middlewares/topic')
+const {checkLogin} = require('../middlewares/auth')
 
 // 1. 创建路由创建
 const router = express.Router()
 
 // 话题相关
 router
-  .get('/create', topicController.showCreate)
-  .post('/create', topicController.create)
+  .get('/create', checkLogin, topicController.showCreate)
+  .post('/create', checkLogin, topicController.create)
   .get('/:topicId', topicController.showDetail)
-  .get('/:topicId/edit', topicController.showEdit)
-  .post('/:topicId/edit', topicMiddleware.checkEditAndRemove, topicController.edit)
-  .post('/:topicId/delete', topicMiddleware.checkEditAndRemove, topicController.delete)
+  .get('/:topicId/edit', checkLogin, topicController.showEdit)
+  .post('/:topicId/edit', checkLogin, topicMiddleware.checkEditAndRemove, topicController.edit)
+  .post('/:topicId/delete', checkLogin, topicMiddleware.checkEditAndRemove, topicController.delete)
 
 // 评论相关
 
