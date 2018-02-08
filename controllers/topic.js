@@ -92,7 +92,7 @@ exports.edit = (req, res, next) => {
 
 exports.delete = (req, res, next) => {
   const {topicId} = req.params
-  
+
   topic.findByIdAndRemove(topicId, (err, results) => {
     if (err) {
       return next(err)

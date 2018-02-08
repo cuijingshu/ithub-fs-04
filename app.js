@@ -81,7 +81,6 @@ app.use('/topic', checkLogin, topicRouter)
 //    res 响应对象
 //    next 下一个匹配的中间件
 // 如何使用：
-//  
 app.use(function (err, req, res, next) {
   res.status(500).send({
     error: err.message

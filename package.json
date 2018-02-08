@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prestart": "eslint ./",
+    "start": "node app.js",
+    "dev": "nodemon --exec npm start"
   },
   "repository": {
     "type": "git",
@@ -35,5 +37,14 @@
     "mysql": "^2.15.0",
     "response-time": "^2.3.2",
     "serve-index": "^1.9.1"
+  },
+  "devDependencies": {
+    "eslint": "^4.17.0",
+    "eslint-config-standard": "^11.0.0-beta.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^6.0.0",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "nodemon": "^1.14.12"
   }
 }

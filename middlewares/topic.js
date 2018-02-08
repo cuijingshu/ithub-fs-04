@@ -6,7 +6,7 @@ exports.checkEditAndRemove = (req, res, next) => {
     if (err) {
       return next(err)
     }
-    
+
     if (!ret) {
       return res.status(200).json({
         code: 1,
