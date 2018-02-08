@@ -38,8 +38,16 @@ module.exports = class Comment {
     }
 
     const start = (page - 1) * limit
-    console.log(start, page, limit)
     query('SELECT * FROM `topic_comments` WHERE `topicId`=? LIMIT ?,?', [topicId, start, limit], callback)
+  }
+
+  static getCountByTopicId (id, callback) {
+    query('SELECT COUNT(*) AS `count` FROM `topic_comments` WHERE `topicId`=?', [id], (err, results) => {
+      if (err) {
+        return callback(err)
+      }
+      callback(null, results[0].count)
+    })
   }
 
   static findById (id, callback) {

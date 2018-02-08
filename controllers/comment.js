@@ -9,17 +9,23 @@ exports.list = (req, res, next) => {
   const {page = 1, limit = 10} = req.query
   const {topicId} = req.params
 
-  Comment.findByTopicId({
-    page, // 页码
-    limit, // 每页大小
-    topicId
-  }, (err, comments) => {
+  Comment.getCountByTopicId(187, (err, count) => {
     if (err) {
       return next(err)
     }
-    res.status(200).json({
-      code: 0,
-      data: comments
+    Comment.findByTopicId({
+      page, // 页码
+      limit, // 每页大小
+      topicId
+    }, (err, comments) => {
+      if (err) {
+        return next(err)
+      }
+      res.status(200).json({
+        code: 0,
+        data: comments,
+        count
+      })
     })
   })
 }

@@ -34,8 +34,16 @@
       <div>{{@ topic.content }}</div>
       {{ /if }}
     </article>
+    <!-- 评论列表 -->
     <div class="comment-container">
     </div>
+    <!-- /评论列表 -->
+
+    <!-- 评论分页 -->
+    <ul id="pagination-demo">
+      
+    </ul>
+    <!-- /评论分页 -->
     {{ if !user }}
       <div class="alert alert-success" role="alert"><a href="/signin">登陆</a>之后才能发表评论</div>
       {{ else }}
@@ -55,6 +63,7 @@
   <script src="/node_modules/jquery-form/dist/jquery.form.min.js"></script>
   <script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
   <script src="/node_modules/art-template/lib/template-web.js"></script>
+  <script src="/node_modules/twbs-pagination/jquery.twbsPagination.min.js"></script>
   <script type="text/template" id="tpl">
     <% comments.forEach(function (item, index) { %>
       <div class="panel panel-default">
@@ -76,8 +85,11 @@
   <script>
     var $commentForm = $('#comment_form')
 
-    // 初次加载，获取所有评论
     loadComments()
+    
+
+    // 初次加载，获取所有评论
+    // loadComments()
 
     $('#delete').on('click', function (e) {
       e.preventDefault()
@@ -120,14 +132,25 @@
       })
     })
 
-    function loadComments() {
+    function loadComments(page = 1) {
       var topicListUrl = $commentForm.attr('action')
+      topicListUrl = topicListUrl + '?page=' + page
 
       $.get(topicListUrl, function (data) {
         var htmlStr = template('tpl', {
           comments: data.data
         })
+        // 渲染列表数据
         $('.comment-container').html(htmlStr)
+
+        // 渲染分页数据
+        $('#pagination-demo').twbsPagination({
+          totalPages: Math.ceil(data.count / 10),
+          visiblePages: 5,
+          onPageClick: function (event, page) {
+            loadComments(page)
+          }
+        })
       })
     }
   </script>
