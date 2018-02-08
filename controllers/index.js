@@ -8,40 +8,58 @@ exports.showIndex = (req, res, next) => {
   let {categoryId} = req.query
   categoryId = parseInt(categoryId) // 将字符串类型的 id 转成数字
 
-  if (!categoryId) {
-    topicCategory.findAll((err, topicCategories) => {
+  topicCategory.findAll((err, topicCategories) => {
+    if (err) {
+      return next(err)
+    }
+    topic.findAll({
+      categoryId
+    }, (err, topics) => {
       if (err) {
         return next(err)
       }
-      topic.findAll((err, topics) => {
-        if (err) {
-          return next(err)
-        }
-        res.render('index.html', {
-          topics,
-          topicCategories,
-          categoryId
-        })
+      res.render('index.html', {
+        topics,
+        topicCategories,
+        categoryId
       })
     })
-  } else {
-    // 查所有分类
-    topicCategory.findAll((err, topicCategories) => {
-      if (err) {
-        return next(err)
-      }
+  })
 
-      // 查询所有话题
-      topic.findByCategoryId(categoryId, (err, topics) => {
-        if (err) {
-          return next(err)
-        }
-        res.render('index.html', {
-          topics,
-          topicCategories,
-          categoryId
-        })
-      })
-    })
-  }
+  // if (!categoryId) {
+  //   topicCategory.findAll((err, topicCategories) => {
+  //     if (err) {
+  //       return next(err)
+  //     }
+  //     topic.findAll((err, topics) => {
+  //       if (err) {
+  //         return next(err)
+  //       }
+  //       res.render('index.html', {
+  //         topics,
+  //         topicCategories,
+  //         categoryId
+  //       })
+  //     })
+  //   })
+  // } else {
+  //   // 查所有分类
+  //   topicCategory.findAll((err, topicCategories) => {
+  //     if (err) {
+  //       return next(err)
+  //     }
+
+  //     // 查询所有话题
+  //     topic.findByCategoryId(categoryId, (err, topics) => {
+  //       if (err) {
+  //         return next(err)
+  //       }
+  //       res.render('index.html', {
+  //         topics,
+  //         topicCategories,
+  //         categoryId
+  //       })
+  //     })
+  //   })
+  // }
 }

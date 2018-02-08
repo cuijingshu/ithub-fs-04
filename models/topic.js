@@ -1,7 +1,19 @@
-const {query} = require('../utilities/db-helper')
+const {query, parseToWhereStr} = require('../utilities/db-helper')
 
-exports.findAll = callback => {
-  query('SELECT * FROM `topics`', callback)
+exports.findAll = (...args) => {
+  let callback
+  let conditionObj = {}
+
+  if (args.length === 1) {
+    callback = args[0]
+  } else if (args.length === 2) {
+    conditionObj = args[0]
+    callback = args[1]
+  }
+
+  const whereSql = parseToWhereStr(conditionObj)
+
+  query('SELECT * FROM `topics`' + whereSql, callback)
 }
 
 exports.findByCategoryId = (categoryId, callback) => {

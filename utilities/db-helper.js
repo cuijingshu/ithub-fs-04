@@ -23,3 +23,20 @@ exports.query = (...args) => {
     })
   })
 }
+
+// 将一个对象转换成 SQL where 字符串语句
+exports.parseToWhereStr = (whereObj = {}) => {
+  let whereSql = 'WHERE 1=1'
+  for (let key in whereObj) {
+    let item = whereObj[key]
+
+    // 判断如果有对象的属性值是有效的，才进行条件语句拼接
+    if (item) {
+      if (typeof item === 'string') {
+        item = `'${item}'`
+      }
+      whereSql += ` AND ${key}=${item} `
+    }
+  }
+  return whereSql
+}
