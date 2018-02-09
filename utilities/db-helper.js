@@ -1,7 +1,11 @@
 const mysql = require('mysql')
 const {dbConfig} = require('../config')
+const util = require('util')
 
 const pool = mysql.createPool(dbConfig)
+
+// 提示：只要你原来的函数是 Error First 风格的 API 都可以使用 util.promisify 来转换为 promise APi
+// const getConnection = util.promisify(pool.getConnection)
 
 exports.query = (...args) => {
   // 从数组中弹出最后一个元素 callback 回调函数
@@ -20,6 +24,25 @@ exports.query = (...args) => {
         return callback(err)
       }
       callback(null, results)
+    })
+  })
+}
+
+function getConnection () {
+  return new Promise((resolve, reject) => {
+    pool.getConnection((err, connection) => {
+      err ? reject(err) : resolve(connection)
+    })
+  })
+}
+
+exports.asyncQuery = async (...args) => {
+  const connection = await getConnection()
+  return new Promise((resolve, reject) => {
+    connection.query(...args, (err, results) => {
+      // 释放回连接池
+      connection.release()
+      err ? reject(err) : resolve(results)
     })
   })
 }
