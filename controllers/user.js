@@ -9,7 +9,9 @@ exports.showSignin = async (req, res, next) => {
 exports.signin = async (req, res, next) => {
   try {
     const body = req.body
-    const [user] = await User.findByEmail(body.email)
+    const user = await User.findOne({
+      email: body.email
+    })
 
     if (!user) {
       return res.status(200).json({
@@ -42,14 +44,23 @@ exports.showSignup = async (req, res, next) => {
 exports.signup = async (req, res, next) => {
   try {
     const body = req.body
-    if ((await User.findByEmail(body.email))[0]) {
+
+    if (await User.findOne({
+      where: {
+        email: body.email
+      }
+    })) {
       return res.status(200).json({
         code: 1,
         message: '邮箱已被存在'
       })
     }
 
-    if ((await User.findByNickname(body.nickname))[0]) {
+    if (await User.findOne({
+      where: {
+        nickname: body.nickname
+      }
+    })) {
       return res.status(200).json({
         code: 2,
         message: '昵称已被存在'
@@ -58,12 +69,16 @@ exports.signup = async (req, res, next) => {
 
     body.password = md5(body.password)
 
-    const ret = await new User(body).save()
+    // const ret = await new User(body).save()
+
+    const ret = await User.create({
+      ...body
+    })
 
     // 注册成功，写入 Session
     req.session.user = {
       ...body,
-      id: ret.insertId
+      id: ret.id
     }
 
     res.status(200).json({
